@@ -200,6 +200,13 @@ void DockManagerData::removeView(const juce::String& viewid)
     auto viewParent = view.getParent();
     if (!viewParent.isValid()) {return;}
     viewParent.removeChild(view, nullptr);
+
+    /// Check for Selected Tab
+    if (getDockType(viewParent) == DockTypes::tabs
+        && getSelectedId(viewParent) == viewid
+        && viewParent.getNumChildren() > 1)
+        setSelected(viewParent, getUuid(viewParent.getChild(0)));
+    
     checkForOrphanedTrees();
 }
 
@@ -1137,6 +1144,12 @@ void DockManagerData::removeChildFromParent(juce::ValueTree& tree)
     auto parent = tree.getParent();
     if (!parent.isValid()) {return;}
     parent.removeChild(tree, nullptr);
+    
+    /// Check for Selected Tab
+    if (getDockType(parent) == DockTypes::tabs
+        && getSelectedId(parent) == getUuid(tree)
+        && parent.getNumChildren() > 1)
+        setSelected(parent, getUuid(parent.getChild(0)));
 }
 
 
