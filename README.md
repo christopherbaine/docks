@@ -4,4 +4,4 @@ Custom Juce Module for Docking/Exploding Windows
 
 
 
-If you do wind up using this, I would love to hear from you! 
+If you do use this for your project, I would love to hear from you! 
