@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root>
+  <window uuid="309aed19a6cd4220bb2d9d3d4c4a276a" x="0.0" y="0.0" width="1440.0"
+          height="900.0" name="3By3">
+    <root uuid="315b97754fd34af39fcb65371b7bb29b" name="root" dockType="0">
+      <view uuid="c8148e497b084014944846b07ae5f304" name="" dockType="3">
+        <view uuid="e5936c301b9445518d436bd92a4824f7" name="" dockType="2" width="300">
+          <view uuid="24ea6e73f3ba49e1bc2ef75f96eab030" name="Elements" dockType="0"/>
+          <view uuid="f909b9bf90ae4901bbcb4861441b285c" name="Canvases" dockType="0" height="200"/>
+        </view>
+        <view uuid="8694ad85ee4b439bb8710bd496e65161" name="" dockType="2">
+          <view uuid="653f5ba548bc46449818ae1134ff9fbe" name="Canvas" dockType="0"/>
+          <view uuid="14ec6b28dc274d6abd74adbe8dafda7a" name="Options" dockType="0"/>
+        </view>
+        <view uuid="5449a19d797f43e9bd3d96b0ad258059" name="" dockType="2" width="300">
+          <view uuid="8c41aa3367ee4098be7ba036781b8828" name="Cuest" dockType="0"/>
+          <view uuid="3eed7660000042db9df6416c629d2b92" name="CueList" dockType="0" height="200"/>
+        </view>
+      </view>
+    </root>
+  </window>
+</root>
