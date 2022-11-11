@@ -928,30 +928,30 @@ bool DockingComponent::keyPressed(const juce::KeyPress& key)
 bool DockingComponent::keyPressed_tabs(const juce::KeyPress& key)
 {
     if (!isTabs()) {return false;}
-
-    if (key == juce::KeyPress('1', juce::ModifierKeys::commandModifier, 0))
+    auto tabMod = juce::ModifierKeys::altModifier;
+    if (key == juce::KeyPress('1', tabMod, 0))
         return selectTab(0);
-    else if (key == juce::KeyPress('2', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('2', tabMod, 0))
         return selectTab(1);
-    else if (key == juce::KeyPress('3', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('3', tabMod, 0))
         return selectTab(2);
-    else if (key == juce::KeyPress('4', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('4', tabMod, 0))
         return selectTab(3);
-    else if (key == juce::KeyPress('5', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('5', tabMod, 0))
         return selectTab(4);
-    else if (key == juce::KeyPress('6', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('6', tabMod, 0))
         return selectTab(5);
-    else if (key == juce::KeyPress('7', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('7', tabMod, 0))
         return selectTab(6);
-    else if (key == juce::KeyPress('8', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('8', tabMod, 0))
         return selectTab(7);
-    else if (key == juce::KeyPress('9', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('9', tabMod, 0))
         return selectTab(8);
-    else if (key == juce::KeyPress('0', juce::ModifierKeys::commandModifier, 0))
+    else if (key == juce::KeyPress('0', tabMod, 0))
         return selectTab(9);
-    else if (key == juce::KeyPress(juce::KeyPress::tabKey, juce::ModifierKeys::ctrlModifier, 0))
+    else if (key == juce::KeyPress(juce::KeyPress::tabKey, tabMod, 0))
         return selectNextTab();
-    else if (key == juce::KeyPress(juce::KeyPress::tabKey, juce::ModifierKeys::ctrlModifier | juce::ModifierKeys::shiftModifier, 0))
+    else if (key == juce::KeyPress(juce::KeyPress::tabKey, tabMod | juce::ModifierKeys::shiftModifier, 0))
         return selectPreviousTab();
     
     return false;
@@ -997,14 +997,14 @@ bool DockingComponent::changeFocusTo(const juce::KeyPress& key)
     if (!component) {return false;}
     juce::Point<int> point;
     auto globalBounds = localAreaToGlobal(getLocalBounds());
-
-    if (key == juce::KeyPress(juce::KeyPress::upKey, juce::ModifierKeys::altModifier, 0))
+    auto mod = juce::ModifierKeys::altModifier;
+    if (key == juce::KeyPress(juce::KeyPress::upKey, mod, 0))
         point = juce::Point<int>(globalBounds.getCentreX(), globalBounds.getY() - _headerHeight);
-    else if (key == juce::KeyPress(juce::KeyPress::downKey, juce::ModifierKeys::altModifier, 0))
+    else if (key == juce::KeyPress(juce::KeyPress::downKey, mod, 0))
         point = juce::Point<int>(globalBounds.getCentreX(), globalBounds.getBottom() + _headerHeight);
-    else if (key == juce::KeyPress(juce::KeyPress::leftKey, juce::ModifierKeys::altModifier, 0))
+    else if (key == juce::KeyPress(juce::KeyPress::leftKey, mod, 0))
         point = juce::Point<int>(globalBounds.getX() - _headerHeight, globalBounds.getCentreY());
-    else if (key == juce::KeyPress(juce::KeyPress::rightKey, juce::ModifierKeys::altModifier, 0))
+    else if (key == juce::KeyPress(juce::KeyPress::rightKey, mod, 0))
         point = juce::Point<int>(globalBounds.getRight() + _headerHeight, globalBounds.getCentreY());
     else
         return false;
