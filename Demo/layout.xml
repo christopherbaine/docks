@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <root>
-  <window uuid="309aed19a6cd4220bb2d9d3d4c4a276a" x="0.0" y="0.0" width="1440.0"
-          height="900.0" name="3By3">
+  <window uuid="309aed19a6cd4220bb2d9d3d4c4a276a" name="3By3">
     <root uuid="315b97754fd34af39fcb65371b7bb29b" name="root" dockType="0">
       <view uuid="c8148e497b084014944846b07ae5f304" name="" dockType="3">
         <view uuid="e5936c301b9445518d436bd92a4824f7" name="" dockType="2" width="300">

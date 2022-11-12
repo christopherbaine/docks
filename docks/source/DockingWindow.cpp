@@ -584,7 +584,7 @@ DockingWindow::DockingWindow(DockManager& manager, DockManagerData& data, const 
     setUsingNativeTitleBar(true);
     setResizable(true, false);
     setVisible(true);
-    
+
     /// Add Listener
     if (auto listener = _manager._delegate.getKeyListenerForWindow(name))
         addKeyListener(listener);
@@ -668,19 +668,20 @@ void DockingWindow::checkWindowSize()
     if (display == nullptr)
         display = displays.getPrimaryDisplay();
     
-    if (display)
+    if (display) 
     {
-        if (display->userArea.getRight() < position.getX())
-            _data.setX(_tree, display->userArea.getX());
+        auto area = display->userArea.withTrimmedTop(getTitleBarHeight());
+        if (area.getRight() < position.getX() || position.getX() < area.getX())
+            _data.setX(_tree, area.getX());
         
-        if (display->userArea.getBottom() < position.getY())
-            _data.setY(_tree, display->userArea.getY());
+        if (area.getBottom() < position.getY() || position.getY() < area.getY())
+            _data.setY(_tree, area.getY());
         
-        if (display->userArea.getWidth() < size.getX() || size.isOrigin())
-            _data.setWidth(_tree, display->userArea.getWidth());
+        if (area.getWidth() < size.getX() || size.isOrigin())
+            _data.setWidth(_tree, area.getWidth());
         
-        if (display->userArea.getHeight() < size.getY()|| size.isOrigin())
-            _data.setHeight(_tree, display->userArea.getHeight());
+        if (area.getHeight() < size.getY()|| size.isOrigin())
+            _data.setHeight(_tree, area.getHeight());
     }
 }
 
