@@ -123,8 +123,6 @@ void DockManager::openLayout(juce::InputStream& inputStream)
     _components.clear();
     _windows.clear();
     _data.openLayout(inputStream);
-    DBG("Open Layout:");
-    printTree();
 }
 
 
