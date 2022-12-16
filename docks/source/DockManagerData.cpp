@@ -738,10 +738,10 @@ const juce::String DockManagerData::dropLocationToString(DropLocation drop) cons
         case DropLocation::parentTop:    {return "Parent Top";}
         case DropLocation::parentBottom: {return "Parent Bottom";}
         case DropLocation::tabs:         {return "Tabs";}
-        case DropLocation::rootTop:      {return "Root Top";}
-        case DropLocation::rootBottom:   {return "Root Bottom";}
-        case DropLocation::rootLeft:     {return "Root Left";}
-        case DropLocation::rootRight:    {return "Root Right";}
+        case DropLocation::rootTop:      {return "Window Top";}
+        case DropLocation::rootBottom:   {return "Window Bottom";}
+        case DropLocation::rootLeft:     {return "Window Left";}
+        case DropLocation::rootRight:    {return "Window Right";}
         case DropLocation::none:         {return "Window";}
     }
     return "";
