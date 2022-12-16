@@ -4,6 +4,7 @@
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <docks/docks.h>
 #include <../../docks/tests/catch2.hpp>
+#include "JuceHeader.h"
 
 /**
  -------------------------------------------------------------
