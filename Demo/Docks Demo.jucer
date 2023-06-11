@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="vSDt77" name="DockableWindowsV2" projectType="guiapp" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="17">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" cppLanguageStandard="17"
+              displaySplashScreen="1">
   <MAINGROUP id="TowhHp" name="DockableWindowsV2">
     <GROUP id="{B984F793-6B53-844C-E9B2-0CE341D000B5}" name="Source">
       <FILE id="ciylPG" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>

@@ -116,6 +116,7 @@ public:
     juce::ValueTree getNewView(const juce::String viewName, DockTypes dockAt = DockTypes::tabs);
     const juce::String addView(const juce::String& toUuid, const juce::String& viewName, DockTypes dockAt = DockTypes::tabs);
     void removeView(const juce::String& viewId);
+    void removeViewAndChildren(const juce::String& viewid); 
     bool showView(const juce::String& viewName); 
 
     /// Docking

@@ -884,12 +884,17 @@ void DockingComponent::checkWillDisappear()
 
 void DockingComponent::checkViewsShouldExist()
 {
-    for (auto comp : _components)
-        if (comp)
-            comp->checkViewsShouldExist();
-    
-    if (getWidth() < _minimumSize || getHeight() < _minimumSize)
-        _data.removeView(getUuid());
+    auto shouldNotExist = getWidth() < _minimumSize || getHeight() < _minimumSize;
+    if (shouldNotExist)
+    {
+        _data.removeViewAndChildren(getUuid());
+    }
+    else
+    {
+        for (auto comp : _components)
+            if (comp)
+                comp->checkViewsShouldExist();
+    }
 }
 
 
