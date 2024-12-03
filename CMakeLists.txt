@@ -19,9 +19,16 @@ endif()
 juce_add_module(docks)
 
 # This is the definition of the GUI Demo app
-juce_add_binary_data(Resources SOURCES "${CMAKE_CURRENT_LIST_DIR}/Demo/layout.xml" "${CMAKE_CURRENT_LIST_DIR}/docks/images/LockOn.png")
+juce_add_binary_data(Resources SOURCES "${CMAKE_CURRENT_LIST_DIR}/Demo/layout.xml" 
+	"${CMAKE_CURRENT_LIST_DIR}/docks/images/LockOn.png"
+	"${CMAKE_CURRENT_LIST_DIR}/docks/images/LockOn.svg"
+	"${CMAKE_CURRENT_LIST_DIR}/docks/images/LockOff.svg"
+	)
+
 juce_add_gui_app(Demo)
+
 target_sources(Demo PRIVATE "${CMAKE_CURRENT_LIST_DIR}/Demo/Source/Main.cpp")
+
 target_link_libraries(Demo PRIVATE 
     juce::juce_core
     juce::juce_gui_basics
