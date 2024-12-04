@@ -19,6 +19,7 @@ FetchContent_MakeAvailable(juce)
 
 set(TARGET_NAME docks)
 add_library(${TARGET_NAME})
+add_library(${TARGET_NAME}::${TARGET_NAME} ALIAS ${TARGET_NAME})
 
 file (GLOB_RECURSE BINARY_FILES "docks/images/*.*")
 juce_add_binary_data(docks_binarydata SOURCES ${BINARY_FILES})
