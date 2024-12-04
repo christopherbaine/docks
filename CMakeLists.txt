@@ -20,11 +20,15 @@ FetchContent_MakeAvailable(juce)
 set(TARGET_NAME docks)
 add_library(${TARGET_NAME})
 
+file (GLOB_RECURSE BINARY_FILES "docks/images/*.*")
+juce_add_binary_data(docks_binarydata SOURCES ${BINARY_FILES})
 
 target_link_libraries(${TARGET_NAME} 
                         PRIVATE 
                             juce::juce_core
                             juce::juce_gui_basics
+                            docks_binarydata
+
 )  
 
 
