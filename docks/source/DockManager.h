@@ -322,8 +322,7 @@ private:
     std::shared_ptr<juce::MenuBarComponent> _menu;
     
     /// Throttler
-    class UpdateThrottler;
-    std::unique_ptr<UpdateThrottler> _throttler;
+    std::unique_ptr<class UpdateThrottler> _throttler;
     
     /// Utility
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DockManager)
