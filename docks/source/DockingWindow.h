@@ -47,7 +47,7 @@ class WindowComponent : public juce::Component, public juce::ValueTree::Listener
 {
 public:
     WindowComponent(DockingWindow& window, DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~WindowComponent();
+    ~WindowComponent() override;
 
     /// Drop Handle
     void showDropHandleAt(const juce::String& uuid, int index, DropLocation type);
@@ -146,7 +146,7 @@ public:
     };
     
     DockingWindow(DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~DockingWindow();
+    ~DockingWindow() override;
     
     void layoutDidLoad() {_rootComponent.layoutDidLoad();}
     void resetAllDisplayNames() {_rootComponent.resetAllDisplayNames();}

@@ -76,20 +76,20 @@ public:
          If you return anything besides nullptr, it will add it to the window (which you probably dont want on macs)
          @returns the Menu to use for the window. Defaults to NoOp
          */
-        virtual std::shared_ptr<juce::MenuBarComponent> getMenuForWindow(const juce::String& windowName) {return nullptr;}
+        virtual std::shared_ptr<juce::MenuBarComponent> getMenuForWindow(const juce::String& /*windowName*/) {return nullptr;}
         
         /**
          Adds a Keyboard Listener to a window. Wont retain
          Adds a keyboard listener to a window
          @return the key listener to add to the window. Can be nullptr
          */
-        virtual juce::KeyListener* getKeyListenerForWindow(const juce::String& windowName) {return nullptr;}
+        virtual juce::KeyListener* getKeyListenerForWindow(const juce::String& /*windowName*/) {return nullptr;}
         
         /**
         Footer for window
         @return Footer component to add to the window. Defaults to NoOp.
          */
-        virtual std::shared_ptr<juce::Component> getFooterForWindow(const juce::String& windowName) {return nullptr;}
+        virtual std::shared_ptr<juce::Component> getFooterForWindow(const juce::String& /*windowName*/) {return nullptr;}
         
         /**
          Layout Did Update
@@ -99,7 +99,7 @@ public:
     
     
     DockManager(Delegate& delegate);
-    ~DockManager();
+    ~DockManager() override;
     
     /**
      Open View in New window

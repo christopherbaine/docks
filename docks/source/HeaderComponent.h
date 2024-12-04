@@ -24,7 +24,7 @@ class TabComponent : public juce::Component, private juce::ValueTree::Listener
 {
 public:
     TabComponent(DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~TabComponent();
+    ~TabComponent() override;
 
     /// Getters
     const juce::String getUuid() const;
@@ -79,7 +79,7 @@ class HeaderComponent : public juce::Component, private juce::ValueTree::Listene
 {
 public:
     HeaderComponent(DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~HeaderComponent();
+    ~HeaderComponent() override;
 
 private:
     

@@ -44,7 +44,7 @@ public:
     };
     
     DockingComponent(DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~DockingComponent();
+    ~DockingComponent() override;
 
     /// Getters
     const bool hasSubItems() const;
