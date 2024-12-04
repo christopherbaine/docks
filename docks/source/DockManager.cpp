@@ -1,6 +1,6 @@
 #include "DockManager.h"
 #include "DockingWindow.h"
-
+#include "DockingComponent.h"
 /**
  -------------------------------------------------------------
  ===================================
