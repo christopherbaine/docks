@@ -803,6 +803,10 @@ void DockingComponent::dragOperationStarted(const juce::DragAndDropTarget::Sourc
 
 void DockingComponent::dragOperationEnded(const juce::DragAndDropTarget::SourceDetails& details)
 {
+    /// Check for the correct type
+    if (!details.description.isArray()) {return;}
+
+    /// Show the source component 
     if (auto comp = details.sourceComponent)
         comp->setVisible(true);
     
