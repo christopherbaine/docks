@@ -439,7 +439,7 @@ void WindowComponent::valueTreePropertyChanged(juce::ValueTree& treeWhosePropert
         if (locked)
         {
             _lockedButton = std::make_unique<juce::ImageButton>();
-            auto image = juce::ImageCache::getFromMemory(BinaryData::LockOn_svg, BinaryData::LockOn_svgSize);
+            auto image = juce::ImageCache::getFromMemory(BinaryData::docks_LockOn_svg, BinaryData::docks_LockOn_svgSize);
             _lockedButton->setImages(true, true, true,
                                      image, 1.0, juce::Colours::orange,     /// normal
                                      image, 0.5, juce::Colours::lightblue,  /// Over
