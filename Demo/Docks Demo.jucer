@@ -10,8 +10,11 @@
             file="../docks/tests/test_DockManager.cpp"/>
       <FILE id="nKvmQJ" name="test_DockManagerData.cpp" compile="1" resource="0"
             file="../docks/tests/test_DockManagerData.cpp"/>
-      <FILE id="cpI4Js" name="LockOn.png" compile="0" resource="1" file="../docks/images/LockOn.png"/>
       <FILE id="EznVDe" name="layout.xml" compile="0" resource="1" file="layout.xml"/>
+      <FILE id="vIfdcb" name="docks_LockOff.svg" compile="0" resource="1"
+            file="../docks/images/docks_LockOff.svg"/>
+      <FILE id="KBppRY" name="docks_LockOn.svg" compile="0" resource="1"
+            file="../docks/images/docks_LockOn.svg"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
