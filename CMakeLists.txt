@@ -3,14 +3,14 @@
 cmake_minimum_required(VERSION 3.30)
 
 # Specify the version for the docks project. For now, let's use 0.1.0
-project(docks VERSION 0.1.0 LANGUAGES CXX)
+project(docks VERSION 0.1.0 LANGUAGES C CXX)
 
 include(FetchContent)
 
 FetchContent_Declare(
     juce
     GIT_REPOSITORY    https://github.com/juce-framework/JUCE.git
-    GIT_TAG     8.0.3
+    GIT_TAG     8.0.13
     GIT_PROGRESS TRUE
 )
 
