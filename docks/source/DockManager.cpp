@@ -189,7 +189,7 @@ void DockManager::create2Up(const juce::String& windowName, const juce::StringAr
 {
     juce::Rectangle<float> bounds;
     if (auto display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay())
-        bounds = display->userArea.toFloat();
+        bounds = display->userBounds.toFloat();
     
     auto [windowId, rootId] = _data.addNewWindow(windowName, bounds);
     if (views.isEmpty()) {return;}
@@ -202,7 +202,7 @@ void DockManager::create3Up(const juce::String& windowName, const juce::StringAr
 {
     juce::Rectangle<float> bounds;
     if (auto display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay())
-        bounds = display->userArea.toFloat();
+        bounds = display->userBounds.toFloat();
     
     auto [windowId, rootId] = _data.addNewWindow(windowName, bounds);
     if (views.isEmpty()) {return;}
@@ -216,7 +216,7 @@ void DockManager::create4Up(const juce::String& windowName, const juce::StringAr
 {
     juce::Rectangle<float> bounds;
     if (auto display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay())
-        bounds = display->userArea.toFloat();
+        bounds = display->userBounds.toFloat();
     
     auto [windowId, rootId] = _data.addNewWindow(windowName, bounds);
     if (views.isEmpty()) {return;}
@@ -231,7 +231,7 @@ void DockManager::create2By2(const juce::String& windowName, const juce::StringA
 {
     juce::Rectangle<float> bounds;
     if (auto display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay())
-        bounds = display->userArea.toFloat();
+        bounds = display->userBounds.toFloat();
 
     auto [windowId, rootId] = _data.addNewWindow(windowName, bounds);
     if (views.isEmpty()) {return;}
@@ -247,7 +247,7 @@ void DockManager::create3By3(const juce::String& windowName, const juce::StringA
 {
     juce::Rectangle<float> bounds;
     if (auto display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay())
-        bounds = display->userArea.toFloat();
+        bounds = display->userBounds.toFloat();
     
     auto [windowId, rootId] = _data.addNewWindow(windowName, bounds);
     if (views.isEmpty()) {return;}
@@ -264,7 +264,7 @@ void DockManager::create2Rows(const juce::String& windowName, const juce::String
 {
     juce::Rectangle<float> bounds;
     if (auto display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay())
-        bounds = display->userArea.toFloat();
+        bounds = display->userBounds.toFloat();
     
     auto [windowId, rootId] = _data.addNewWindow(windowName, bounds);
     if (views.isEmpty()) {return;}
@@ -277,7 +277,7 @@ void DockManager::create3Rows(const juce::String& windowName, const juce::String
 {
     juce::Rectangle<float> bounds;
     if (auto display = juce::Desktop::getInstance().getDisplays().getPrimaryDisplay())
-        bounds = display->userArea.toFloat();
+        bounds = display->userBounds.toFloat();
     
     auto [windowId, rootId] = _data.addNewWindow(windowName, bounds);
     if (views.isEmpty()) {return;}

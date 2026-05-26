@@ -664,13 +664,13 @@ void DockingWindow::checkWindowSize()
     auto position = _data.getPosition(_tree);
     auto size = _data.getSize(_tree);
     auto displays = juce::Desktop::getInstance().getDisplays();
-    auto display = displays.getDisplayForPoint(position.toInt());
+    auto display = displays.getDisplayForPoint(position);
     if (display == nullptr)
         display = displays.getPrimaryDisplay();
     
     if (display) 
     {
-        auto area = display->userArea.withTrimmedTop(getTitleBarHeight());
+        auto area = display->userBounds.withTrimmedTop(getTitleBarHeight());
         if (area.getRight() < position.getX() || position.getX() < area.getX())
             _data.setX(_tree, area.getX());
         
