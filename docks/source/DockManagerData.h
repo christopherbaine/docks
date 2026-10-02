@@ -120,14 +120,14 @@ public:
     bool showView(const juce::String& viewName); 
 
     /// Docking
-    const bool canDock(const juce::String& viewToDockIn, DropLocation location) const;
+    bool canDock(const juce::String& viewToDockIn, DropLocation location) const;
     void openViewAsNewTab(const juce::String& viewName, const juce::String& regex, DropLocation fallbackType);
     const juce::String dockNewView(const juce::String& viewToDockIn, DropLocation location, const juce::String& name = "");
     void createInNewWindow(const juce::String& viewName, const juce::Rectangle<float>& bounds);
     void openInNewWindow(const juce::String& treeId, const juce::Point<float>& position, const juce::Rectangle<float>& bounds = {});
     void dockView(const juce::String& viewToDock, const juce::String& viewToDockIn, DropLocation location, juce::Point<float> dropPosition, int index = -1);
     bool dockView(const juce::ValueTree& viewToDock, const juce::ValueTree& viewToDockIn, DropLocation location, int index, juce::Point<float> dropPosition = {});
-    const DockTypes getTypeForLocation(DropLocation location) const;
+    DockTypes getTypeForLocation(DropLocation location) const;
     
     /// Getters
     const juce::Rectangle<float> getBounds(const juce::String& uuid) const;
@@ -136,22 +136,22 @@ public:
     const juce::Point<float> getPosition(const juce::ValueTree& fromTree) const;
     const juce::Point<float> getSize(const juce::String& uuid) const;
     const juce::Point<float> getSize(const juce::ValueTree& fromTree) const;
-    const float getWidth(const juce::ValueTree& tree) const;
-    const float getHeight(const juce::ValueTree& tree) const;
+    float getWidth(const juce::ValueTree& tree) const;
+    float getHeight(const juce::ValueTree& tree) const;
     const juce::String getName(const juce::String& uuid) const;
     const juce::String getName(const juce::ValueTree& fromTree) const;
-    const DockTypes getDockType(const juce::String& uuid) const;
-    const DockTypes getDockType(const juce::ValueTree& fromTree) const;
+    DockTypes getDockType(const juce::String& uuid) const;
+    DockTypes getDockType(const juce::ValueTree& fromTree) const;
     const juce::String getUuid(const juce::ValueTree& tree) const;
     const juce::String getSelectedId(const juce::ValueTree& tree) const;
-    const bool isSelected(const juce::ValueTree& tree) const;
-    const bool isWindowLocked(const juce::ValueTree& tree) const;
+    bool isSelected(const juce::ValueTree& tree) const;
+    bool isWindowLocked(const juce::ValueTree& tree) const;
     const juce::String dropLocationToString(DropLocation drop) const; 
     const juce::String dockTypeToString(DockTypes type) const; 
     const std::pair<juce::String, int> getTreeForDockLocation(const juce::String& treeId, DropLocation drop) const;
-    const bool isParentDropLocation(DropLocation drop) const;
-    const bool isRootDropLocation(DropLocation drop) const;
-    const bool isViewDropLocation(DropLocation drop) const;
+    bool isParentDropLocation(DropLocation drop) const;
+    bool isRootDropLocation(DropLocation drop) const;
+    bool isViewDropLocation(DropLocation drop) const;
 
     /// Setters
     void setLayoutName(const juce::String& layoutName); 
@@ -179,10 +179,10 @@ public:
     void setSelected(juce::ValueTree& tree, const juce::String& uuid);
     
     /// Checks
-    const bool isWindow(const juce::ValueTree& tree) const;
-    const bool isRootTree(const juce::ValueTree& tree) const;
-    const bool isRootTree(const juce::String& treeId) const;
-    const bool isView(const juce::ValueTree& tree) const;
+    bool isWindow(const juce::ValueTree& tree) const;
+    bool isRootTree(const juce::ValueTree& tree) const;
+    bool isRootTree(const juce::String& treeId) const;
+    bool isView(const juce::ValueTree& tree) const;
     
     /// Utility
     juce::ValueTree getTree();
@@ -201,7 +201,7 @@ protected:
     bool dockInParent(juce::ValueTree treeToDock, juce::ValueTree treeToDockIn, DropLocation typeToDock, int index);
     bool dockInRoot(juce::ValueTree treeToDock, juce::ValueTree treeToDockIn, DropLocation typeToDock, int index);
     bool dockInNewWindow(juce::ValueTree treeToDock, juce::Point<float> dropPosition, juce::Rectangle<float> windowBounds = {});
-    const int getIndexForLocation(DropLocation location) const;
+    int getIndexForLocation(DropLocation location) const;
     
     /// Check For Orphans
     void checkForOrphanedTrees();

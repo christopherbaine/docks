@@ -3,7 +3,7 @@
 
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <docks/docks.h>
-#include <../../docks/tests/catch2.hpp>
+#include "../../docks/tests/catch2.hpp"
 #include "JuceHeader.h"
 
 /**
@@ -55,7 +55,7 @@ public:
     bool moreThanOneInstanceAllowed() override             { return true; }
 
 
-    void initialise (const juce::String& commandLine) override
+    void initialise (const juce::String& /*commandLine*/) override
     {
         DBG("Running...");
         int result = Catch::Session().run();
@@ -86,7 +86,7 @@ public:
         quit();
     }
 
-    void anotherInstanceStarted (const juce::String& commandLine) override
+    void anotherInstanceStarted (const juce::String& /*commandLine*/) override
     {
     }
     
@@ -123,12 +123,12 @@ public:
         return "Default Window Name";
     }
     
-    std::shared_ptr<juce::MenuBarComponent> getMenuForWindow(const juce::String &windowName) override
+    std::shared_ptr<juce::MenuBarComponent> getMenuForWindow(const juce::String& /*windowName*/) override
     {
         return std::make_shared<juce::MenuBarComponent>();
     }
     
-    std::shared_ptr<juce::Component> getFooterForWindow(const juce::String &windowName) override
+    std::shared_ptr<juce::Component> getFooterForWindow(const juce::String& /*windowName*/) override
     {
         return std::make_shared<juce::Component>();
     }

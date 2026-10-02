@@ -51,7 +51,7 @@ const juce::ValueTree TabComponent::getTree() const
 }
 
 
-const bool TabComponent::getSelected() const
+bool TabComponent::getSelected() const
 {
     if (!_tree.getParent().isValid()) {return false;}
     return _data.getSelectedId(_tree.getParent()) == _data.getUuid(_tree);
@@ -119,7 +119,7 @@ void TabComponent::valueTreeChildAdded(juce::ValueTree& parentTree, juce::ValueT
 }
 
 
-void TabComponent::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
+void TabComponent::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int /*indexFromWhichChildWasRemoved*/)
 {
     if (parentTree != _tree) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Child Removed: Tab " << _data.getUuid(childWhichHasBeenRemoved));
@@ -133,7 +133,7 @@ void TabComponent::valueTreeParentChanged(juce::ValueTree& treeWhoseParentHasCha
 }
 
 
-void TabComponent::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex)
+void TabComponent::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int /*oldIndex*/, int /*newIndex*/)
 {
     if (parentTreeWhoseChildrenHaveMoved != _tree) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Order Changed: Tab " << _data.getUuid(parentTreeWhoseChildrenHaveMoved));
@@ -191,25 +191,25 @@ HeaderComponent::~HeaderComponent()
  ===================================
  */
 
-const bool HeaderComponent::isTabs() const
+bool HeaderComponent::isTabs() const
 {
     return _data.getDockType(_tree) == DockTypes::tabs;
 }
 
 
-const bool HeaderComponent::hasSubItems() const
+bool HeaderComponent::hasSubItems() const
 {
     return _tree.getNumChildren() > 0;
 }
 
 
-const bool HeaderComponent::shouldShowTabs() const
+bool HeaderComponent::shouldShowTabs() const
 {
     return isTabs();
 }
 
 
-const bool HeaderComponent::shouldShowHeader() const
+bool HeaderComponent::shouldShowHeader() const
 {
     return (isTabs() && !hasSubItems()) || (!isTabs() && !hasSubItems());
 }
@@ -233,7 +233,7 @@ const juce::String HeaderComponent::getDisplayName() const
 }
 
 
-const int HeaderComponent::getTabButtonWidth() const
+int HeaderComponent::getTabButtonWidth() const
 {
     if (_tabs.size() == 0)
         return _maxTabWidth;
@@ -244,20 +244,20 @@ const int HeaderComponent::getTabButtonWidth() const
 }
 
 
-const int HeaderComponent::getTabIndex(const juce::Point<int>& atPoint) const
+int HeaderComponent::getTabIndex(const juce::Point<int>& atPoint) const
 {
     if (_tabs.isEmpty()) {return 0;}
     return atPoint.x / getTabButtonWidth();
 }
 
 
-const int HeaderComponent::getTabX(int atIndex) const
+int HeaderComponent::getTabX(int atIndex) const
 {
     return atIndex * getTabButtonWidth();
 }
 
 
-const int HeaderComponent::getNumVisibleTabs() const
+int HeaderComponent::getNumVisibleTabs() const
 {
     int i = 0;
     for (auto tab : _tabs)
@@ -417,7 +417,7 @@ void HeaderComponent::valueTreeChildAdded(juce::ValueTree& parentTree, juce::Val
 }
 
 
-void HeaderComponent::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
+void HeaderComponent::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int /*indexFromWhichChildWasRemoved*/)
 {
     if (parentTree != _tree) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Child Removed: Header " << _data.getUuid(childWhichHasBeenRemoved));
@@ -434,7 +434,7 @@ void HeaderComponent::valueTreeParentChanged(juce::ValueTree& treeWhoseParentHas
 }
 
 
-void HeaderComponent::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex)
+void HeaderComponent::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int /*oldIndex*/, int /*newIndex*/)
 {
     if (parentTreeWhoseChildrenHaveMoved != _tree) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Order Changed: Header " << _data.getUuid(parentTreeWhoseChildrenHaveMoved));
@@ -505,7 +505,7 @@ void HeaderComponent::mouseDrag(const juce::MouseEvent& event)
 }
 
 
-void HeaderComponent::mouseUp(const juce::MouseEvent& event)
+void HeaderComponent::mouseUp(const juce::MouseEvent& /*event*/)
 {
 
 }
@@ -556,21 +556,21 @@ void HeaderComponent::itemDropped(const SourceDetails &dragSourceDetails)
 }
 
 
-void HeaderComponent::itemDragEnter(const SourceDetails &dragSourceDetails)
+void HeaderComponent::itemDragEnter(const SourceDetails& /*dragSourceDetails*/)
 {
     _isDragging = true;
     repaint();
 }
 
 
-void HeaderComponent::itemDragExit(const SourceDetails &dragSourceDetails)
+void HeaderComponent::itemDragExit(const SourceDetails& /*dragSourceDetails*/)
 {
     _isDragging = false;
     repaint();
 }
 
 
-void HeaderComponent::itemDragMove(const SourceDetails &dragSourceDetails)
+void HeaderComponent::itemDragMove(const SourceDetails& /*dragSourceDetails*/)
 {
     _isDragging = true;
     _draggingLocation = getLocalPoint(nullptr, juce::Desktop::getInstance().getMousePosition());
@@ -597,8 +597,8 @@ void HeaderComponent::dragOperationStarted(const juce::DragAndDropTarget::Source
     if (details.sourceComponent == nullptr) {return;}
     if (auto comp = dynamic_cast<TabComponent*>(details.sourceComponent.get()))
         comp->setVisible(false);
-    else if (auto comp = dynamic_cast<HeaderComponent*>(details.sourceComponent.get()))
-        comp->setVisible(false);
+    else if (auto header = dynamic_cast<HeaderComponent*>(details.sourceComponent.get()))
+        header->setVisible(false);
     
     /// Tell Manager to create view when this completes
     _manager.setCreateNewView(true);

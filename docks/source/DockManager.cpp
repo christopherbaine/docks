@@ -455,7 +455,7 @@ juce::PopupMenu DockManager::getAddViewPopupMenu(const juce::ValueTree& tree, Dr
     for (const auto& view : availableViews)
     {
         if (location == DropLocation::none)
-            addViewMenu.addItem(view, [tree, view, location, this]
+            addViewMenu.addItem(view, [view, this]
             {
                 openViewInNewWindow(view, {});
             });
@@ -478,7 +478,7 @@ void DockManager::openInNewWindow(const juce::ValueTree& tree)
     auto mousePosition = juce::Desktop::getInstance().getMousePosition().toFloat();
     
     if (_components.contains(uuid))
-        bounds = _components[uuid]->getBounds().withPosition(mousePosition.x, mousePosition.y).toFloat();
+        bounds = _components[uuid]->getBounds().toFloat().withPosition(mousePosition);
     _data.openInNewWindow(_data.getUuid(tree), {}, bounds);
 }
 
@@ -519,7 +519,7 @@ void DockManager::valueTreeChildAdded(juce::ValueTree& parentTree, juce::ValueTr
 }
 
 
-void DockManager::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
+void DockManager::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int /*indexFromWhichChildWasRemoved*/)
 {
     if (parentTree != _data.getTree()) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Child Removed");
@@ -535,14 +535,14 @@ void DockManager::valueTreeParentChanged(juce::ValueTree& treeWhoseParentHasChan
 }
 
 
-void DockManager::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex)
+void DockManager::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int /*oldIndex*/, int /*newIndex*/)
 {
     if (parentTreeWhoseChildrenHaveMoved != _data.getTree()) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Order Changed");
 }
 
 
-void DockManager::valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& property)
+void DockManager::valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& /*property*/)
 {
     if (_throttler == nullptr)
         _throttler = std::make_unique<DockManager::UpdateThrottler>(*this);

@@ -44,14 +44,14 @@ public:
     };
     
     DockingComponent(DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~DockingComponent();
+    ~DockingComponent() override;
 
     /// Getters
-    const bool hasSubItems() const;
-    const bool isTabs() const;
+    bool hasSubItems() const;
+    bool isTabs() const;
     const juce::String getName() const;
     const juce::String getUuid() const;
-    const bool shouldShowHeader() const;
+    bool shouldShowHeader() const;
     const juce::Rectangle<int> getBoundsForSubview(const juce::String& uuid, int index) const;
     
     /// Check Will Disappear
@@ -64,7 +64,7 @@ public:
     void resetDisplayName(); 
 private:
 
-    const DropLocation getDragLocation(const juce::Point<int> position) const;
+    DropLocation getDragLocation(const juce::Point<int> position) const;
  
 
     /// Component Overrides

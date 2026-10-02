@@ -3,13 +3,13 @@
 cmake_minimum_required(VERSION 3.15)
 
 # Specify the version for the docks project. For now, let's use 0.1.0
-project(docks VERSION 0.1.0 LANGUAGES CXX)
+project(docks VERSION 0.1.0 LANGUAGES C CXX)
 
 # Assume JUCE has been cloned into a subdirectory 
 # If you have the JUCE source tree somewhere else, set the option to the path you want!
-option(DOCKS_JUCE_DIR "Set this to the JUCE source directory if not ./JUCE in this directory")
+set(DOCKS_JUCE_DIR "" CACHE PATH "Set this to the JUCE source directory if not ./JUCE in this directory")
 if(DOCKS_JUCE_DIR)
-add_subdirectory(${DOCKS_JUCE_DIR})
+add_subdirectory(${DOCKS_JUCE_DIR} ${CMAKE_BINARY_DIR}/JUCE)
 else()
 add_subdirectory(JUCE)
 endif()

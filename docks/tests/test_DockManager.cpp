@@ -7,7 +7,7 @@ class TestManagerDelegate : public DockManager::Delegate
 {
 public:
     const juce::StringArray getAvailableViews() const override { return {"Elements", "Canvas", "Cues", "Palette", "CueLists", "ElementLists", "Globals", "Monitors", "State"}; }
-    std::shared_ptr<juce::Component> createView(const juce::String &nameOfViewToCreate) override { return nullptr; }
+    std::shared_ptr<juce::Component> createView(const juce::String& /*nameOfViewToCreate*/) override { return nullptr; }
     const juce::String getDefaultWindowName() const override {return "Window";}
 };
 

@@ -403,7 +403,7 @@ void WindowComponent::valueTreeChildAdded(juce::ValueTree& parentTree, juce::Val
 }
 
 
-void WindowComponent::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved)
+void WindowComponent::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int /*indexFromWhichChildWasRemoved*/)
 {
     if (parentTree != _tree.getParent()) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Removed: WindowComp");
@@ -422,7 +422,7 @@ void WindowComponent::valueTreeParentChanged(juce::ValueTree& treeWhoseParentHas
 }
 
 
-void WindowComponent::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex)
+void WindowComponent::valueTreeChildOrderChanged(juce::ValueTree& /*parentTreeWhoseChildrenHaveMoved*/, int /*oldIndex*/, int /*newIndex*/)
 {
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Order Changed: WindowComp");
 }
@@ -441,9 +441,9 @@ void WindowComponent::valueTreePropertyChanged(juce::ValueTree& treeWhosePropert
             _lockedButton = std::make_unique<juce::ImageButton>();
             auto image = juce::ImageCache::getFromMemory(BinaryData::LockOn_svg, BinaryData::LockOn_svgSize);
             _lockedButton->setImages(true, true, true,
-                                     image, 1.0, juce::Colours::orange,     /// normal
-                                     image, 0.5, juce::Colours::lightblue,  /// Over
-                                     image, 0.8, juce::Colours::blue);      /// Down
+                                     image, 1.0f, juce::Colours::orange,     /// normal
+                                     image, 0.5f, juce::Colours::lightblue,  /// Over
+                                     image, 0.8f, juce::Colours::blue);      /// Down
             _lockedButton->onClick = [this] {_data.setWindowLocked(_data.getUuid(_tree), false);};
             addAndMakeVisible(_lockedButton.get());
         }
@@ -479,7 +479,7 @@ void WindowComponent::itemDragEnter(const SourceDetails &dragSourceDetails)
 }
 
 
-void WindowComponent::itemDragExit(const SourceDetails &dragSourceDetails)
+void WindowComponent::itemDragExit(const SourceDetails& /*dragSourceDetails*/)
 {
     hideDropHandle();
 }
@@ -527,7 +527,7 @@ void WindowComponent::itemDropped(const SourceDetails &dragSourceDetails)
 }
 
 
-const DropLocation WindowComponent::getDragLocation(const juce::Point<int>& position) const
+DropLocation WindowComponent::getDragLocation(const juce::Point<int>& position) const
 {
     auto peerBounds = getLocalBounds();
     const int rootHitSize = 10;
@@ -579,8 +579,8 @@ DockingWindow::DockingWindow(DockManager& manager, DockManagerData& data, const 
     
     /// Setup Window
     setName(_manager._delegate.getDefaultWindowName());
-    setTopLeftPosition(position.getX(), position.getY());
-    setSize(size.getX(), size.getY());
+    setTopLeftPosition(position.toInt());
+    setSize(size.toInt().getX(), size.toInt().getY());
     setUsingNativeTitleBar(true);
     setResizable(true, false);
     setVisible(true);

@@ -252,7 +252,7 @@ bool DockManagerData::showView(const juce::String& viewName)
  ===================================
  */
 
-const bool DockManagerData::canDock(const juce::String& viewToDockIn, DropLocation location) const
+bool DockManagerData::canDock(const juce::String& /*viewToDockIn*/, DropLocation /*location*/) const
 {
     return true;
 }
@@ -672,13 +672,13 @@ const juce::Point<float> DockManagerData::getSize(const juce::ValueTree& fromTre
     return {width, height};
 }
 
-const float DockManagerData::getWidth(const juce::ValueTree& tree) const
+float DockManagerData::getWidth(const juce::ValueTree& tree) const
 {
     return getProperty<float>(tree, dockProps::widthProperty);
 }
 
 
-const float DockManagerData::getHeight(const juce::ValueTree& tree) const
+float DockManagerData::getHeight(const juce::ValueTree& tree) const
 {
     return getProperty<float>(tree, dockProps::heightProperty);
 }
@@ -698,7 +698,7 @@ const juce::String DockManagerData::getName(const juce::ValueTree& fromTree) con
 }
 
 
-const DockTypes DockManagerData::getDockType(const juce::String& uuid) const
+DockTypes DockManagerData::getDockType(const juce::String& uuid) const
 {
     const auto tree = findTree(uuid);
     if (!tree.isValid()) {return DockTypes::none;}
@@ -706,7 +706,7 @@ const DockTypes DockManagerData::getDockType(const juce::String& uuid) const
 }
 
 
-const DockTypes DockManagerData::getDockType(const juce::ValueTree& fromTree) const
+DockTypes DockManagerData::getDockType(const juce::ValueTree& fromTree) const
 {
     auto type = getProperty<int>(fromTree, dockProps::dockType);
     return DockTypes(type);
@@ -722,13 +722,13 @@ const juce::String DockManagerData::getSelectedId(const juce::ValueTree& tree) c
 }
 
 
-const bool DockManagerData::isSelected(const juce::ValueTree& tree) const
+bool DockManagerData::isSelected(const juce::ValueTree& tree) const
 {
     return getUuid(tree) == getSelectedId(tree.getParent());
 }
 
 
-const bool DockManagerData::isWindowLocked(const juce::ValueTree& tree) const
+bool DockManagerData::isWindowLocked(const juce::ValueTree& tree) const
 {
     auto window = findWindow(tree);
     if (!window.isValid() || !isWindow(window)) {return false;}
@@ -780,19 +780,19 @@ const juce::String DockManagerData::dockTypeToString(DockTypes type) const
 }
 
 
-const bool DockManagerData::isParentDropLocation(DropLocation drop) const
+bool DockManagerData::isParentDropLocation(DropLocation drop) const
 {
     return drop == DropLocation::parentTop || drop == DropLocation::parentBottom || drop == DropLocation::parentLeft || drop == DropLocation::parentRight;
 }
 
 
-const bool DockManagerData::isRootDropLocation(DropLocation drop) const
+bool DockManagerData::isRootDropLocation(DropLocation drop) const
 {
     return drop == DropLocation::rootTop || drop == DropLocation::rootBottom || drop == DropLocation::rootLeft || drop == DropLocation::rootRight;
 }
 
 
-const bool DockManagerData::isViewDropLocation(DropLocation drop) const
+bool DockManagerData::isViewDropLocation(DropLocation drop) const
 {
     return drop == DropLocation::viewTop || drop == DropLocation::viewBottom || drop == DropLocation::viewLeft || drop == DropLocation::viewRight;
 }
@@ -806,7 +806,7 @@ juce::ValueTree DockManagerData::getParentForDropType(const juce::ValueTree& tre
 }
 
 
-const DockTypes DockManagerData::getTypeForLocation(DropLocation location) const
+DockTypes DockManagerData::getTypeForLocation(DropLocation location) const
 {
     return location == DropLocation::viewTop || location == DropLocation::viewBottom || location == DropLocation::parentTop || location == DropLocation::parentBottom  || location == DropLocation::rootTop || location == DropLocation::rootBottom ? DockTypes::vertical
             : location == DropLocation::viewLeft || location == DropLocation::viewRight || location == DropLocation::parentLeft || location == DropLocation::parentRight || location == DropLocation::rootRight || location == DropLocation::rootLeft ? DockTypes::horizontal
@@ -815,7 +815,7 @@ const DockTypes DockManagerData::getTypeForLocation(DropLocation location) const
 }
 
 
-const int DockManagerData::getIndexForLocation(DropLocation location) const
+int DockManagerData::getIndexForLocation(DropLocation location) const
 {
     return location == DropLocation::viewTop || location == DropLocation::parentTop || location == DropLocation::viewLeft || location == DropLocation::parentLeft || location == DropLocation::rootLeft || location == DropLocation::rootTop ? 0 : -1;
 }
@@ -1004,25 +1004,25 @@ void DockManagerData::setSelected(juce::ValueTree& tree, const juce::String& uui
  ===================================
  */
 
-const bool DockManagerData::isWindow(const juce::ValueTree& tree) const
+bool DockManagerData::isWindow(const juce::ValueTree& tree) const
 {
     return tree.isValid() && tree.getType().toString() == dockIds::windowIdentifier;
 }
 
 
-const bool DockManagerData::isView(const juce::ValueTree& tree) const
+bool DockManagerData::isView(const juce::ValueTree& tree) const
 {
     return tree.isValid() && tree.getType().toString() == dockIds::viewIdentifier;
 }
 
 
-const bool DockManagerData::isRootTree(const juce::ValueTree& tree) const
+bool DockManagerData::isRootTree(const juce::ValueTree& tree) const
 {
     return tree.isValid() && tree.getType().toString() == dockIds::rootTreeIdentifier;
 }
 
 
-const bool DockManagerData::isRootTree(const juce::String& treeId) const
+bool DockManagerData::isRootTree(const juce::String& treeId) const
 {
     return isRootTree(findTree(treeId));
 }

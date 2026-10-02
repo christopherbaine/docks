@@ -24,12 +24,12 @@ class TabComponent : public juce::Component, private juce::ValueTree::Listener
 {
 public:
     TabComponent(DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~TabComponent();
+    ~TabComponent() override;
 
     /// Getters
     const juce::String getUuid() const;
     const juce::String getDisplayName() const;
-    const bool getSelected() const;
+    bool getSelected() const;
     const juce::ValueTree getTree() const; 
 private:
     
@@ -79,7 +79,7 @@ class HeaderComponent : public juce::Component, private juce::ValueTree::Listene
 {
 public:
     HeaderComponent(DockManager& manager, DockManagerData& data, const juce::ValueTree& tree);
-    ~HeaderComponent();
+    ~HeaderComponent() override;
 
 private:
     
@@ -97,18 +97,18 @@ private:
      ===================================
      */
     
-    const bool isTabs() const;
-    const bool hasSubItems() const;
-    const bool shouldShowTabs() const;
-    const bool shouldShowHeader() const;
+    bool isTabs() const;
+    bool hasSubItems() const;
+    bool shouldShowTabs() const;
+    bool shouldShowHeader() const;
     const juce::String getUuid() const;
     const juce::String getViewName() const;
     const juce::String getDisplayName() const;
     
-    const int getTabButtonWidth() const;
-    const int getTabIndex(const juce::Point<int>& atPoint) const;
-    const int getTabX(int atIndex) const;
-    const int getNumVisibleTabs() const;
+    int getTabButtonWidth() const;
+    int getTabIndex(const juce::Point<int>& atPoint) const;
+    int getTabX(int atIndex) const;
+    int getNumVisibleTabs() const;
 
     /// Value Tree Listener
     void valueTreeChildAdded(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenAdded) override;

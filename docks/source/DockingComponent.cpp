@@ -21,11 +21,11 @@ public:
         setRepaintsOnMouseActivity(true);
     }
     
-    std::function<void(juce::Point<float>, int)> onDrag = [](auto delta, auto index){};
+    std::function<void(juce::Point<float>, int)> onDrag = [](auto /*delta*/, auto /*index*/){};
     std::function<void()> finishedDrag = []{};
     
-    const int getIndex() const {return _index;}
-    const bool isVertical() const {return _isVertical;}
+    int getIndex() const {return _index;}
+    bool isVertical() const {return _isVertical;}
     
 private:
     
@@ -144,13 +144,13 @@ DockingComponent::~DockingComponent()
  ===================================
  */
 
-const bool DockingComponent::hasSubItems() const
+bool DockingComponent::hasSubItems() const
 {
     return _tree.getNumChildren() > 0;
 }
 
 
-const bool DockingComponent::isTabs() const
+bool DockingComponent::isTabs() const
 {
     return _data.getDockType(_tree) == DockTypes::tabs;
 }
@@ -168,7 +168,7 @@ const juce::String DockingComponent::getUuid() const
 }
 
 
-const bool DockingComponent::shouldShowHeader() const
+bool DockingComponent::shouldShowHeader() const
 {
     return isTabs()
             || (!isTabs() && !hasSubItems() && _data.getDockType( _tree.getParent()) != DockTypes::tabs);
@@ -367,7 +367,7 @@ void DockingComponent::layoutDidLoad()
  ====================================
  */
 
-void DockingComponent::focusOfChildComponentChanged(FocusChangeType cause)
+void DockingComponent::focusOfChildComponentChanged(FocusChangeType /*cause*/)
 {
     if (!isTabs() || !hasKeyboardFocus(true)) {repaint(); return;}
     
@@ -461,7 +461,7 @@ void DockingComponent::setupResizerBars()
         {
             auto bar = std::make_shared<ResizerBar>(i, isVertical);
             _resizerBars.add(bar);
-            bar->onDrag = [this](auto p, auto i) {resizerDidDrag(p, i);};
+            bar->onDrag = [this](auto p, auto index) {resizerDidDrag(p, index);};
             bar->finishedDrag = [this] {resizerMouseUp();};
             
             addAndMakeVisible(bar.get());
@@ -469,7 +469,7 @@ void DockingComponent::setupResizerBars()
     }
     else if (numExpected < _resizerBars.size())
     {
-        for (auto i = numExpected; i < _resizerBars.size(); i++)
+        while (_resizerBars.size() > numExpected)
             _resizerBars.removeLast();
     }
     
@@ -569,7 +569,7 @@ void DockingComponent::valueTreeParentChanged(juce::ValueTree& treeWhoseParentHa
 }
 
 
-void DockingComponent::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int oldIndex, int newIndex)
+void DockingComponent::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int /*oldIndex*/, int /*newIndex*/)
 {
     if (parentTreeWhoseChildrenHaveMoved != _tree) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Order Changed: Component " << _data.getUuid(parentTreeWhoseChildrenHaveMoved));
@@ -633,7 +633,7 @@ void DockingComponent::itemDragEnter(const SourceDetails& dragSourceDetails)
 }
 
 
-void DockingComponent::itemDragExit(const SourceDetails &dragSourceDetails)
+void DockingComponent::itemDragExit(const SourceDetails& /*dragSourceDetails*/)
 {
     auto rootComponent = findParentComponentOfClass<WindowComponent>();
     if (!rootComponent) {repaint(); return;}
@@ -718,7 +718,7 @@ void DockingComponent::itemDropped(const SourceDetails &dragSourceDetails)
 }
 
 
-const DropLocation DockingComponent::getDragLocation(const juce::Point<int> position) const
+DropLocation DockingComponent::getDragLocation(const juce::Point<int> position) const
 {
     auto bounds = getLocalBounds();
     if (shouldShowHeader())
@@ -794,8 +794,8 @@ void DockingComponent::dragOperationStarted(const juce::DragAndDropTarget::Sourc
     if (auto comp = dynamic_cast<TabComponent*>(details.sourceComponent.get()))
         comp->setVisible(false);
     
-    else if (auto comp = dynamic_cast<HeaderComponent*>(details.sourceComponent.get()))
-        comp->setVisible(false);
+    else if (auto header = dynamic_cast<HeaderComponent*>(details.sourceComponent.get()))
+        header->setVisible(false);
     
     _manager.setCreateNewView(true);
 }
