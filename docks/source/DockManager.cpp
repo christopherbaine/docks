@@ -1,6 +1,23 @@
 #include "DockManager.h"
 #include "DockingWindow.h"
 
+
+/**
+ ====================================
+ MARK: - Throttler -
+ ====================================
+ */
+class DockManager::UpdateThrottler : public juce::Timer
+{
+public:
+    UpdateThrottler(DockManager& manager) : _manager(manager) {}
+    void didRecieveUpdate() { startTimer(3000); }
+private:
+    void timerCallback() override {_manager._delegate.didUpdateLayouts(); stopTimer();}
+    DockManager& _manager;
+};
+
+
 /**
  -------------------------------------------------------------
  ===================================
@@ -478,22 +495,6 @@ void DockManager::printTree()
     _data.printTree();
 }
 
-
-
-/**
- ====================================
- MARK: - Throttler -
- ====================================
- */
-class DockManager::UpdateThrottler : public juce::Timer
-{
-public:
-    UpdateThrottler(DockManager& manager) : _manager(manager) {}
-    void didRecieveUpdate() { startTimer(3000); }
-private:
-    void timerCallback() override {_manager._delegate.didUpdateLayouts(); stopTimer();}
-    DockManager& _manager;
-};
 
 
 /**
