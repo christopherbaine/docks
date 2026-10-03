@@ -36,3 +36,25 @@ target_link_libraries(Demo PRIVATE
     Resources
     )
 juce_generate_juce_header(Demo)
+
+# Unit tests. Run with ctest, or run the DocksTests executable directly
+enable_testing()
+juce_add_console_app(DocksTests)
+
+target_sources(DocksTests PRIVATE
+    "${CMAKE_CURRENT_LIST_DIR}/docks/tests/main.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/docks/tests/test_DockManager.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/docks/tests/test_DockManagerData.cpp"
+    )
+
+# Lets tests run the message loop, so timers fire
+target_compile_definitions(DocksTests PRIVATE JUCE_MODAL_LOOPS_PERMITTED=1)
+
+target_link_libraries(DocksTests PRIVATE
+    juce::juce_core
+    juce::juce_gui_basics
+    docks
+    Resources
+    )
+
+add_test(NAME DocksTests COMMAND DocksTests)

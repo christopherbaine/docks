@@ -301,10 +301,25 @@ void DockManager::create3Rows(const juce::String& windowName, const juce::String
 
 void DockManager::removeView(const juce::String& viewId)
 {
+    auto tree = _data.findTree(viewId);
+    if (_data.isView(tree))
+        removeComponentsIn(tree);
     _data.removeView(viewId);
-    
-    if (_components.contains(viewId))
-        _components.remove(viewId);
+}
+
+
+void DockManager::removeWindow(const juce::String& windowId)
+{
+    removeComponentsIn(_data.findTree(windowId));
+    _data.removeWindow(windowId);
+}
+
+
+void DockManager::removeComponentsIn(const juce::ValueTree& tree)
+{
+    _components.remove(_data.getUuid(tree));
+    for (auto child : tree)
+        removeComponentsIn(child);
 }
 
 
@@ -509,8 +524,17 @@ void DockManager::printTree()
  ===================================
  */
 
+void DockManager::layoutDidChange()
+{
+    if (_throttler == nullptr)
+        _throttler = std::make_unique<DockManager::UpdateThrottler>(*this);
+    _throttler->didRecieveUpdate();
+}
+
+
 void DockManager::valueTreeChildAdded(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenAdded)
 {
+    layoutDidChange();
     if (parentTree != _data.getTree()) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Child Added");
     
@@ -527,6 +551,7 @@ void DockManager::valueTreeChildAdded(juce::ValueTree& parentTree, juce::ValueTr
 
 void DockManager::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int /*indexFromWhichChildWasRemoved*/)
 {
+    layoutDidChange();
     if (parentTree != _data.getTree()) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Child Removed");
     auto id = _data.getUuid(childWhichHasBeenRemoved);
@@ -543,6 +568,7 @@ void DockManager::valueTreeParentChanged(juce::ValueTree& treeWhoseParentHasChan
 
 void DockManager::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChildrenHaveMoved, int /*oldIndex*/, int /*newIndex*/)
 {
+    layoutDidChange();
     if (parentTreeWhoseChildrenHaveMoved != _data.getTree()) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Order Changed");
 }
@@ -550,9 +576,7 @@ void DockManager::valueTreeChildOrderChanged(juce::ValueTree& parentTreeWhoseChi
 
 void DockManager::valueTreePropertyChanged(juce::ValueTree& treeWhosePropertyHasChanged, const juce::Identifier& /*property*/)
 {
-    if (_throttler == nullptr)
-        _throttler = std::make_unique<DockManager::UpdateThrottler>(*this);
-    _throttler->didRecieveUpdate();
+    layoutDidChange();
     
     if (treeWhosePropertyHasChanged != _data.getTree()) {return;}
 }

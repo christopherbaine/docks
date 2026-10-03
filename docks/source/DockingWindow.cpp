@@ -635,7 +635,7 @@ void DockingWindow::resized()
 void DockingWindow::closeButtonPressed()
 {
     auto id = _data.getUuid(_tree);
-    _data.removeWindow(id);
+    _manager.removeWindow(id);
 }
 
 

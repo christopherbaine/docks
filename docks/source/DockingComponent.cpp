@@ -420,7 +420,7 @@ void DockingComponent::setupView()
      }
     
     /// Get the Component from the manager
-    _view = _manager.getComponent(uuid, name);
+    _view = _data.isRootTree(_tree) ? nullptr : _manager.getComponent(uuid, name);
     
     if (_view)
     {
@@ -719,7 +719,7 @@ void DockingComponent::itemDropped(const SourceDetails &dragSourceDetails)
         << ", Point: " << localPointToGlobal(getMouseXYRelative()).toString());
     
     /// Drop
-    _data.dockView(viewToDock, treeToDropAt, location, localPointToGlobal(getMouseXYRelative()).toFloat());
+    _data.dockView(viewToDock, treeToDropAt, location, localPointToGlobal(getMouseXYRelative()).toFloat(), index);
 }
 
 
@@ -870,9 +870,9 @@ void DockingComponent::resizerMouseUp()
 {
     checkWillDisappear();
     auto uuids = getViewsToRemove();
-    auto& data = _data;
+    auto& manager = _manager;
     for (const auto& uuid : uuids)
-        data.removeViewAndChildren(uuid);
+        manager.removeView(uuid);
 }
 
 

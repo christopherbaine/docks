@@ -1,9 +1,5 @@
-#define CATCH_CONFIG_RUNNER
-
-
 #include <juce_gui_basics/juce_gui_basics.h>
 #include <docks/docks.h>
-#include "../../docks/tests/catch2.hpp"
 #include "JuceHeader.h"
 
 /**
@@ -57,11 +53,6 @@ public:
 
     void initialise (const juce::String& /*commandLine*/) override
     {
-        DBG("Running...");
-        int result = Catch::Session().run();
-        DBG("Num Tests Failed: " << result);
-
-        
         auto stream = juce::MemoryInputStream(BinaryData::layout_xml, BinaryData::layout_xmlSize, false);
         _windowManager.openLayout(stream);
         
@@ -111,7 +102,7 @@ public:
     
     std::shared_ptr<juce::Component> createView(const juce::String &nameOfViewToCreate) override
     {
-        if (nameOfViewToCreate.isEmpty() || nameOfViewToCreate == "root") {return nullptr;}
+        if (nameOfViewToCreate.isEmpty()) {return nullptr;}
         if (nameOfViewToCreate.contains("Cues"))
             return std::make_shared<TestComponent>(nameOfViewToCreate, juce::Colours::pink);
         else

@@ -272,6 +272,8 @@ private:
     
     /// Removal should run through the manager
     void removeView(const juce::String& treeId);
+    void removeWindow(const juce::String& windowId);
+    void removeComponentsIn(const juce::ValueTree& tree);
     
     /// Get Actual View
     std::shared_ptr<juce::Component> getComponent(const juce::String& withUuid, const juce::String& name);
@@ -287,6 +289,7 @@ private:
     void printTree();
     
     /// ValueTree Listener
+    void layoutDidChange();
     void valueTreeChildAdded(juce::ValueTree &parentTree, juce::ValueTree &childWhichHasBeenAdded) override;
     void valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int indexFromWhichChildWasRemoved) override;
     void valueTreeParentChanged(juce::ValueTree& treeWhoseParentHasChanged) override;

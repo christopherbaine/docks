@@ -346,6 +346,13 @@ void DockManagerData::dockView(const juce::String& viewToDock, const juce::Strin
     
     /// Index
     auto newIndex = location == DropLocation::tabs ? index : getIndexForLocation(location);
+    if (isParentDropLocation(location) && index >= 0 && getDockType(treeToDockIn) == getTypeForLocation(location))
+    {
+        auto after = location == DropLocation::parentRight || location == DropLocation::parentBottom;
+        newIndex = index + (after ? 1 : 0);
+        if (treeToDock.getParent() == treeToDockIn && treeToDockIn.indexOf(treeToDock) < newIndex)
+            newIndex--;
+    }
     
     /// Remove From Parent
     removeChildFromParent(treeToDock);
@@ -388,18 +395,11 @@ bool DockManagerData::dockInView(juce::ValueTree treeToDock, juce::ValueTree tre
 
     if (isRootTree(treeToDockIn) || getDockType(treeToDockIn) != dockType || isRootDropLocation(dockLocation) || dockLocation == DropLocation::none) {return false;}
     
-    /// Get the index
-    int indexAdd = dockLocation == DropLocation::viewRight || dockLocation == DropLocation::viewBottom || dockLocation == DropLocation::parentRight || dockLocation == DropLocation::parentBottom ? 1 : 0;
-    bool isTabs = dockLocation == DropLocation::tabs;
-    
-    /// Set index
-    auto newIndex = treeToDockIn.getParent().indexOf(treeToDockIn) + indexAdd;
-    
     /// Dock In View
-    treeToDockIn.addChild(treeToDock, isTabs ? index : newIndex, nullptr);
+    treeToDockIn.addChild(treeToDock, index, nullptr);
     
     /// Set Selected Tab
-    if (isTabs)
+    if (dockLocation == DropLocation::tabs)
         setSelected(treeToDockIn, getUuid(treeToDock));
     
     /// Check for Orphans
