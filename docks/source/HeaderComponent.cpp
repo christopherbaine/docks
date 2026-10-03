@@ -303,7 +303,7 @@ void HeaderComponent::paint(juce::Graphics &g)
         {
             g.fillAll(draggingColor.withAlpha(0.5f));
             g.setColour(draggingColor);
-            g.drawRect(getBounds(), 2);
+            g.drawRect(getLocalBounds(), 2);
         }
         else
         {

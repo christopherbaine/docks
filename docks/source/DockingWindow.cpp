@@ -405,9 +405,9 @@ void WindowComponent::valueTreeChildAdded(juce::ValueTree& parentTree, juce::Val
 
 void WindowComponent::valueTreeChildRemoved(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenRemoved, int /*indexFromWhichChildWasRemoved*/)
 {
-    if (parentTree != _tree.getParent()) {return;}
+    if (parentTree != _tree) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Removed: WindowComp");
-    if (childWhichHasBeenRemoved == parentTree.getChild(0) && _dockingComponent != nullptr)
+    if (_dockingComponent != nullptr && _dockingComponent->getUuid() == _data.getUuid(childWhichHasBeenRemoved))
     {
         removeChildComponent(_dockingComponent.get()); 
         _dockingComponent.reset();
@@ -433,27 +433,31 @@ void WindowComponent::valueTreePropertyChanged(juce::ValueTree& treeWhosePropert
     if (treeWhosePropertyHasChanged != _tree) {return;}
     if (PRINT_TREE_LISTENERS) DBG("Value Tree Property Changed: WindowComp");
     if (property.toString() == dockProps::lockedProperty)
+        updateLockedState();
+}
+
+
+void WindowComponent::updateLockedState()
+{
+    auto locked = _data.isWindowLocked(_tree);
+    _window.setAlwaysOnTop(locked);
+    if (locked)
     {
-        auto locked = _data.isWindowLocked(_tree);
-        _window.setAlwaysOnTop(locked);
-        if (locked)
-        {
-            _lockedButton = std::make_unique<juce::ImageButton>();
-            auto image = juce::ImageCache::getFromMemory(BinaryData::LockOn_svg, BinaryData::LockOn_svgSize);
-            _lockedButton->setImages(true, true, true,
-                                     image, 1.0f, juce::Colours::orange,     /// normal
-                                     image, 0.5f, juce::Colours::lightblue,  /// Over
-                                     image, 0.8f, juce::Colours::blue);      /// Down
-            _lockedButton->onClick = [this] {_data.setWindowLocked(_data.getUuid(_tree), false);};
-            addAndMakeVisible(_lockedButton.get());
-        }
-        else
-        {
-            _lockedButton = nullptr;
-        }
-        resized();
-        repaint();
+        _lockedButton = std::make_unique<juce::ImageButton>();
+        auto image = juce::ImageCache::getFromMemory(BinaryData::LockOn_svg, BinaryData::LockOn_svgSize);
+        _lockedButton->setImages(true, true, true,
+                                 image, 1.0f, juce::Colours::orange,     /// normal
+                                 image, 0.5f, juce::Colours::lightblue,  /// Over
+                                 image, 0.8f, juce::Colours::blue);      /// Down
+        _lockedButton->onClick = [this] {_data.setWindowLocked(_data.getUuid(_tree), false);};
+        addAndMakeVisible(_lockedButton.get());
     }
+    else
+    {
+        _lockedButton = nullptr;
+    }
+    resized();
+    repaint();
 }
 
 
@@ -584,6 +588,7 @@ DockingWindow::DockingWindow(DockManager& manager, DockManagerData& data, const 
     setUsingNativeTitleBar(true);
     setResizable(true, false);
     setVisible(true);
+    _rootComponent.updateLockedState();
 
     /// Add Listener
     if (auto listener = _manager._delegate.getKeyListenerForWindow(name))

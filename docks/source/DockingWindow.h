@@ -64,6 +64,9 @@ public:
     
     /// Overlay
     void showOverlay(bool show, const juce::String& textToShow);
+    
+    /// Locked
+    void updateLockedState();
 
 private:
     /// Setup

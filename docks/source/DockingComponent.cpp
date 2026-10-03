@@ -57,10 +57,10 @@ private:
 
     void mouseUp(const juce::MouseEvent &event) override
     {
+        _initialPoint = {};
+        
         if (event.mouseWasDraggedSinceMouseDown())
             finishedDrag();
-        
-        _initialPoint = {};
     }
 
 
@@ -677,7 +677,12 @@ void DockingComponent::itemDragMove(const SourceDetails &dragSourceDetails)
                 location = DropLocation::rootBottom;
                 break;
             }
-            default:
+            case DropLocation::rootLeft:
+            case DropLocation::rootRight:
+            case DropLocation::rootTop:
+            case DropLocation::rootBottom:
+            case DropLocation::tabs:
+            case DropLocation::none:
                 break;
         }
     }
@@ -864,7 +869,10 @@ void DockingComponent::resizerDidDrag(juce::Point<float> delta, int index)
 void DockingComponent::resizerMouseUp()
 {
     checkWillDisappear();
-    checkViewsShouldExist();
+    auto uuids = getViewsToRemove();
+    auto& data = _data;
+    for (const auto& uuid : uuids)
+        data.removeViewAndChildren(uuid);
 }
 
 
@@ -882,19 +890,19 @@ void DockingComponent::checkWillDisappear()
 }
 
 
-void DockingComponent::checkViewsShouldExist()
+juce::StringArray DockingComponent::getViewsToRemove() const
 {
-    auto shouldNotExist = getWidth() < _minimumSize || getHeight() < _minimumSize;
-    if (shouldNotExist)
+    juce::StringArray uuids;
+    if (getWidth() < _minimumSize || getHeight() < _minimumSize)
     {
-        _data.removeViewAndChildren(getUuid());
+        uuids.add(getUuid());
+        return uuids;
     }
-    else
-    {
-        for (auto comp : _components)
-            if (comp)
-                comp->checkViewsShouldExist();
-    }
+
+    for (auto comp : _components)
+        if (comp)
+            uuids.addArray(comp->getViewsToRemove());
+    return uuids;
 }
 
 

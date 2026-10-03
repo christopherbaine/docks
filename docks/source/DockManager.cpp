@@ -157,6 +157,12 @@ void DockManager::saveTemplate()
 }
 
 
+const juce::ValueTree DockManager::getCurrentLayout() const
+{
+    return _data._rootTree;
+}
+
+
 void DockManager::openTemplate()
 {
     _fileChooser = std::make_unique<juce::FileChooser>("Open Template",
@@ -169,7 +175,7 @@ void DockManager::openTemplate()
     _fileChooser->launchAsync(flags, [this](const juce::FileChooser& chooser){
         auto file = chooser.getResult();
         if (!file.existsAsFile()) {return;}
-        _data.openFromFile(file);
+        openLayout(file);
     });
 }
 
@@ -395,12 +401,12 @@ juce::PopupMenu DockManager::getTabPopupMenu(const juce::ValueTree& tree)
     menu.addItem("Close Other Tabs", [tree, this]{
         auto parent = tree.getParent();
         if (!parent.isValid()) {return;}
-        for (auto i = 0; i < parent.getNumChildren(); i++)
-        {
-            auto child = parent.getChild(i);
-            if (child.isValid() && child != tree)
-                removeView(_data.getUuid(child));
-        }
+        juce::StringArray idsToClose;
+        for (auto child : parent)
+            if (child != tree)
+                idsToClose.add(_data.getUuid(child));
+        for (const auto& id : idsToClose)
+            removeView(id);
     });
     
 #if JUCE_DEBUG
@@ -417,7 +423,7 @@ juce::PopupMenu DockManager::getTabPopupMenu(const juce::ValueTree& tree)
     debugMenu.addItem("Print Tree", [this]{
         _data.printTree();
     });
-    debugMenu.addSubMenu("Debug", debugMenu);
+    menu.addSubMenu("Debug", debugMenu);
 #endif
     return menu;
 }

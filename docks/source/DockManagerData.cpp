@@ -26,8 +26,8 @@ bool DockManagerData::saveAsTemplate(const juce::File& file)
 {
     auto fileToSave = file;
     
-    if (fileToSave.getFileExtension() != "xml")
-        fileToSave.withFileExtension("xml");
+    if (!fileToSave.hasFileExtension("xml"))
+        fileToSave = fileToSave.withFileExtension("xml");
     
     if (!fileToSave.existsAsFile())
         fileToSave.create();
@@ -277,17 +277,30 @@ void DockManagerData::createInNewWindow(const juce::String& viewName, const juce
 
 void DockManagerData::openViewAsNewTab(const juce::String& viewName, const juce::String& regex, DropLocation fallbackType)
 {
-    auto expr = std::regex(regex.toStdString());
-    auto treeToOpenIn = findTree(_rootTree, [expr](const juce::ValueTree& tree)->bool {
-        if (!tree.hasProperty(dockProps::nameProperty)) {return false;}
-        auto name = tree.getProperty(dockProps::nameProperty).toString().toStdString();
-        return std::regex_match(name.begin(), name.end(), expr);
-    });
+    juce::ValueTree treeToOpenIn;
+    try
+    {
+        auto expr = std::regex(regex.toStdString());
+        treeToOpenIn = findTree(_rootTree, [expr](const juce::ValueTree& tree)->bool {
+            if (!tree.hasProperty(dockProps::nameProperty)) {return false;}
+            auto name = tree.getProperty(dockProps::nameProperty).toString().toStdString();
+            return std::regex_match(name.begin(), name.end(), expr);
+        });
+    }
+    catch (const std::regex_error&)
+    {
+        DBG("Invalid regex: " << regex);
+    }
     
     if (treeToOpenIn.isValid())
     {
         /// Open as Tab
         dockNewView(getUuid(treeToOpenIn), DropLocation::tabs, viewName);
+    }
+    else if (_rootTree.getNumChildren() == 0)
+    {
+        /// No windows to fall back to
+        createInNewWindow(viewName, {});
     }
     else
     {
@@ -329,6 +342,7 @@ void DockManagerData::dockView(const juce::String& viewToDock, const juce::Strin
     
     /// Get the Tree to dock in
     auto treeToDockIn = findTree(viewToDockIn);
+    if (!treeToDock.isValid() || !treeToDockIn.isValid() || treeToDockIn.isAChildOf(treeToDock)) {return;}
     
     /// Index
     auto newIndex = location == DropLocation::tabs ? index : getIndexForLocation(location);
@@ -495,8 +509,11 @@ bool DockManagerData::dockInNewWindow(juce::ValueTree treeToDock, juce::Point<fl
     
     /// Add to root view for window
     rootView.addChild(treeToDock, -1, nullptr);
-    auto size = getSize(window);
-    setPosition(window, dropPosition.withX(dropPosition.getX() - size.getX()/2));
+    if (windowBounds.isEmpty())
+    {
+        auto size = getSize(window);
+        setPosition(window, dropPosition.withX(dropPosition.getX() - size.getX()/2));
+    }
     
     /// Check for Orphans
     checkForOrphanedTrees();
@@ -537,13 +554,17 @@ void DockManagerData::checkForOrphanedTreesIn(juce::ValueTree tree)
         {
             auto treeToMove = child.getChild(0);
             auto index = tree.indexOf(child);
-            child.removeChild(treeToMove, nullptr);
             tree.removeChild(child, nullptr);
-            tree.addChild(treeToMove, index, nullptr);
-            if (child.hasProperty(dockProps::widthProperty))
-                setWidth(treeToMove, getWidth(child));
-            if (child.hasProperty(dockProps::heightProperty))
-                setHeight(treeToMove, getHeight(child));
+            if (treeToMove.isValid())
+            {
+                child.removeChild(treeToMove, nullptr);
+                tree.addChild(treeToMove, index, nullptr);
+                if (child.hasProperty(dockProps::widthProperty))
+                    setWidth(treeToMove, getWidth(child));
+                if (child.hasProperty(dockProps::heightProperty))
+                    setHeight(treeToMove, getHeight(child));
+            }
+            i--;
         }
         
         else
@@ -554,7 +575,7 @@ void DockManagerData::checkForOrphanedTreesIn(juce::ValueTree tree)
 
 void DockManagerData::checkForOrphanedWindows()
 {
-    for (auto i = 0; i < _rootTree.getNumChildren(); i++)
+    for (auto i = _rootTree.getNumChildren(); --i >= 0;)
     {
         auto child = _rootTree.getChild(i);
         if (!child.isValid()) {continue;}

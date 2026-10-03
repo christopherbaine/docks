@@ -104,7 +104,7 @@ private:
     /// Resizer Utility
     void resizerDidDrag(juce::Point<float> delta, int index);
     void resizerMouseUp();
-    void checkViewsShouldExist();
+    juce::StringArray getViewsToRemove() const;
     void setViewsMayDisappear();
     void resizeParent();
     
