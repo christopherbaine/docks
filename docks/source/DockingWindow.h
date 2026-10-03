@@ -71,11 +71,14 @@ public:
 private:
     /// Setup
     void setupMenu();
+    void setupHeader();
     void setupFooter(); 
+    const juce::String getWindowName() const;
     
     /// Component Overrides
     void resized() override;
     void paint(juce::Graphics &g) override;
+    void paintOverChildren(juce::Graphics &g) override;
     
     /// Value Tree Listener
     void valueTreeChildAdded(juce::ValueTree& parentTree, juce::ValueTree& childWhichHasBeenAdded) override;
@@ -117,6 +120,9 @@ private:
     
     /// Menu
     std::shared_ptr<juce::MenuBarComponent> _menuComponent = nullptr;
+    
+    /// Header
+    std::shared_ptr<juce::Component> _headerComponent = nullptr;
     
     /// Footer
     std::shared_ptr<juce::Component> _footerComponent = nullptr;

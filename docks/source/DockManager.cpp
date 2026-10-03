@@ -620,6 +620,13 @@ void DockManager::showOverlayWithText(bool show, const juce::String& textToShow)
 }
 
 
+void DockManager::repaintWindows()
+{
+    for (auto window : _windows)
+        window->repaint();
+}
+
+
 
 
 

@@ -92,6 +92,21 @@ public:
         virtual std::shared_ptr<juce::Component> getFooterForWindow(const juce::String& /*windowName*/) {return nullptr;}
         
         /**
+        Header for window
+        Spans the width of the window above the docked views, at the height the component is given
+        @return Header component to add to the window. Defaults to NoOp.
+         */
+        virtual std::shared_ptr<juce::Component> getHeaderForWindow(const juce::String& /*windowName*/) {return nullptr;}
+        
+        /**
+         Paint Over Window
+         Called after a window's views have painted, so you can draw over them (ie mode indicators)
+         Call DockManager::repaintWindows when what you draw changes
+         @param dockArea: the bounds of the docked views within the window
+         */
+        virtual void paintOverWindow(juce::Graphics& /*g*/, const juce::String& /*windowName*/, juce::Rectangle<int> /*dockArea*/) {}
+        
+        /**
          Layout Did Update
          */
         virtual void didUpdateLayouts() {}
@@ -188,6 +203,12 @@ public:
      @param textToShow: the text in the middle of the overlay
      */
     void showOverlayWithText(bool show, const juce::String& textToShow);
+    
+    /**
+     Repaint Windows
+     Repaints every window, so Delegate::paintOverWindow is called again
+     */
+    void repaintWindows();
     
     /**
      Creates a 2 Column Window Layout

@@ -151,6 +151,7 @@ WindowComponent::WindowComponent(DockingWindow& window, DockManager& manager, Do
     
     /// Setup Additional Views
     setupMenu();
+    setupHeader();
     setupFooter();
     
     /// Refresh View
@@ -198,6 +199,9 @@ void WindowComponent::resized()
         _menuComponent->setBounds(bounds.removeFromTop(20));
 #endif
     
+    if (_headerComponent != nullptr)
+        _headerComponent->setBounds(bounds.removeFromTop(_headerComponent->getHeight()));
+    
     const int trim = 5;
     const int bottomTrim = _footerComponent != nullptr || _lockedButton != nullptr ? 0 : trim;
     if (_dockingComponent)
@@ -219,6 +223,13 @@ void WindowComponent::paint(juce::Graphics &g)
         g.setColour(juce::Colours::lightyellow);
         g.drawRect(getLocalBounds());
     }
+}
+
+
+void WindowComponent::paintOverChildren(juce::Graphics &g)
+{
+    if (_dockingComponent)
+        _manager._delegate.paintOverWindow(g, getWindowName(), _dockingComponent->getBounds());
 }
 
 
@@ -257,6 +268,21 @@ void WindowComponent::setupFooter()
     _footerComponent = _manager._delegate.getFooterForWindow(name);
     if (_footerComponent == nullptr) {return;}
     addAndMakeVisible(_footerComponent.get());
+}
+
+
+void WindowComponent::setupHeader()
+{
+    _headerComponent = _manager._delegate.getHeaderForWindow(getWindowName());
+    if (_headerComponent == nullptr) {return;}
+    addAndMakeVisible(_headerComponent.get());
+}
+
+
+const juce::String WindowComponent::getWindowName() const
+{
+    auto name = _data.getName(_tree);
+    return name.isEmpty() ? _manager._delegate.getDefaultWindowName() : name;
 }
 
 
