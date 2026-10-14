@@ -91,6 +91,13 @@ public:
     /** Open From file */
     bool openFromFile(const juce::File& file);
     bool openLayout(juce::InputStream& inputStream);
+    bool openLayout(const juce::XmlElement& xml);
+
+    /**
+     Is Valid Layout
+     A root tree holding at least one window, and nothing but windows
+     */
+    static bool isValidLayout(const juce::XmlElement& xml);
 
     
     /**
