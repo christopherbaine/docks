@@ -181,14 +181,16 @@ public:
     /**
      Open Layouts
      Should be a valid XML file which was saved via SaveLayout
+     Returns false and keeps the current layout if the file is not a layout with at least one window
      */
-    void openLayout(const juce::File& fileToOpen);
+    bool openLayout(const juce::File& fileToOpen);
     
     /**
      Open Layouts From Input Stream
      Should be a valid XML file which was saved via SaveLayout
+     Returns false and keeps the current layout if the stream is not a layout with at least one window
      */
-    void openLayout(juce::InputStream& inputStream);
+    bool openLayout(juce::InputStream& inputStream);
     
     
     /**
@@ -308,6 +310,9 @@ private:
     
     /// Uitlity
     void printTree();
+    
+    /// Layouts
+    bool openLayout(std::unique_ptr<juce::XmlElement> xml);
     
     /// ValueTree Listener
     void layoutDidChange();

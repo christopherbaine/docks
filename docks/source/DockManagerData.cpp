@@ -80,9 +80,7 @@ bool DockManagerData::openFromFile(const juce::File& file)
     if (!file.existsAsFile()) {return false;}
     auto xml = juce::parseXML(file);
     if (!xml) {return false;}
-    _rootTree.removeAllChildren(nullptr);
-    _rootTree.copyPropertiesAndChildrenFrom(juce::ValueTree::fromXml(*xml), nullptr);
-    return true;
+    return openLayout(*xml);
 }
 
 
@@ -90,8 +88,27 @@ bool DockManagerData::openLayout(juce::InputStream& inputStream)
 {
     auto xml = juce::parseXML(inputStream.readEntireStreamAsString());
     if (!xml) {return false;}
+    return openLayout(*xml);
+}
+
+
+bool DockManagerData::openLayout(const juce::XmlElement& xml)
+{
+    if (!isValidLayout(xml)) {return false;}
     _rootTree.removeAllChildren(nullptr);
-    _rootTree.copyPropertiesAndChildrenFrom(juce::ValueTree::fromXml(*xml), nullptr);
+    _rootTree.copyPropertiesAndChildrenFrom(juce::ValueTree::fromXml(xml), nullptr);
+    return true;
+}
+
+
+bool DockManagerData::isValidLayout(const juce::XmlElement& xml)
+{
+    if (!xml.hasTagName(dockIds::rootTreeIdentifier) || xml.getNumChildElements() == 0) {return false;}
+    
+    for (auto* child : xml.getChildIterator())
+        if (!child->hasTagName(dockIds::windowIdentifier))
+            return false;
+    
     return true;
 }
 

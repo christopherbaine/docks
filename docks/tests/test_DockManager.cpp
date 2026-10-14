@@ -627,9 +627,42 @@ TEST_CASE("dockManager_saveAndOpenLayout_file")
     
     auto otherDelegate = ViewCreatingDelegate();
     auto other = test_DockManager(otherDelegate);
-    other.openLayout(temp.getFile());
+    REQUIRE(other.openLayout(temp.getFile()));
     REQUIRE(other.numWindows() == 1);
     CHECK(other.layout(0) == "H[A B]");
+}
+
+
+TEST_CASE("dockManager_openLayout_invalidKeepsWindows")
+{
+    auto delegate = ViewCreatingDelegate();
+    auto manager = test_DockManager(delegate);
+    manager.addRow({"A", "B"});
+    
+    auto checkUnchanged = [&]
+    {
+        REQUIRE(manager.numWindows() == 1);
+        CHECK(manager.window(0) != nullptr);
+        CHECK(manager.layout(0) == "H[A B]");
+        CHECK(manager.components().size() == 2);
+        CHECK(delegate.isAlive("A"));
+        CHECK(delegate.isAlive("B"));
+    };
+    
+    for (auto text : {"not xml", "<root/>", "<root><view/></root>"})
+    {
+        juce::MemoryInputStream in(text, strlen(text), false);
+        CHECK_FALSE(manager.openLayout(in));
+        checkUnchanged();
+    }
+    
+    CHECK_FALSE(manager.openLayout(juce::File()));
+    checkUnchanged();
+    
+    juce::TemporaryFile temp(".xml");
+    REQUIRE(temp.getFile().replaceWithText("<root><window"));
+    CHECK_FALSE(manager.openLayout(temp.getFile()));
+    checkUnchanged();
 }
 
 

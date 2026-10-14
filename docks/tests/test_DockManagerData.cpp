@@ -1019,6 +1019,29 @@ TEST_CASE("dockManagerData_openLayout_invalidKeepsTree")
 }
 
 
+TEST_CASE("dockManagerData_openLayout_notALayoutKeepsTree")
+{
+    auto data = test_DockManagerData();
+    addWindowWithRow(data, {"A"});
+    auto before = data.getTree().createCopy();
+    
+    for (auto text : {"<root/>", "<other><window/></other>", "<root><window/><view/></root>"})
+    {
+        auto xml = juce::parseXML(text);
+        REQUIRE(xml != nullptr);
+        CHECK_FALSE(DockManagerData::isValidLayout(*xml));
+        CHECK_FALSE(data.openLayout(*xml));
+        CHECK(data.getTree().isEquivalentTo(before));
+    }
+    
+    juce::MemoryOutputStream out;
+    REQUIRE(data.saveLayout(out));
+    auto saved = juce::parseXML(out.toString());
+    REQUIRE(saved != nullptr);
+    CHECK(DockManagerData::isValidLayout(*saved));
+}
+
+
 TEST_CASE("dockManagerData_saveAndOpen_file")
 {
     auto data = test_DockManagerData();

@@ -124,22 +124,32 @@ void DockManager::saveLayout(juce::OutputStream& outputStream)
 }
 
 
-void DockManager::openLayout(const juce::File& fileToOpen)
+bool DockManager::openLayout(const juce::File& fileToOpen)
 {
-    _components.clear();
-    _windows.clear();
-    _data.openFromFile(fileToOpen);
-    
-    for (auto window : _windows)
-        window->layoutDidLoad();
+    if (!fileToOpen.existsAsFile()) {return false;}
+    return openLayout(juce::parseXML(fileToOpen));
 }
 
 
-void DockManager::openLayout(juce::InputStream& inputStream)
+bool DockManager::openLayout(juce::InputStream& inputStream)
 {
+    return openLayout(juce::parseXML(inputStream.readEntireStreamAsString()));
+}
+
+
+bool DockManager::openLayout(std::unique_ptr<juce::XmlElement> xml)
+{
+    /// Check before clearing, otherwise a bad layout leaves no windows at all
+    if (xml == nullptr || !DockManagerData::isValidLayout(*xml)) {return false;}
+    
     _components.clear();
     _windows.clear();
-    _data.openLayout(inputStream);
+    if (!_data.openLayout(*xml)) {return false;}
+    
+    for (auto window : _windows)
+        window->layoutDidLoad();
+    
+    return true;
 }
 
 
