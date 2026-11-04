@@ -92,8 +92,10 @@ void TabComponent::paint(juce::Graphics &g)
     
     /// Border
     g.setColour(tabBorderColor);
-    g.drawLine(0, 0, 0, getHeight());
-    g.drawLine(getWidth(), 0, getWidth(), getHeight());
+    auto width = static_cast<float>(getWidth());
+    auto height = static_cast<float>(getHeight());
+    g.drawLine(0.0f, 0.0f, 0.0f, height);
+    g.drawLine(width, 0.0f, width, height);
 
     /// Text
     auto bounds = getLocalBounds().withTrimmedRight(getHeight());

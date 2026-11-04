@@ -12,8 +12,8 @@ WindowDropHandle::WindowDropHandle()
 
 void WindowDropHandle::paint(juce::Graphics& g)
 {
-    auto bounds = getLocalBounds();
-    const int lineWidth = 5;
+    auto bounds = getLocalBounds().toFloat();
+    const float lineWidth = 5.0f;
     const auto& laf = getLookAndFeel().getDefaultLookAndFeel();
     auto color = laf.isColourSpecified(DockingComponent::ColourIds::draggingColorId) ?    laf.findColour(DockingComponent::ColourIds::draggingColorId) : juce::Colours::blue;
 
@@ -68,8 +68,8 @@ void WindowDropHandle::paint(juce::Graphics& g)
         case DropLocation::tabs:
         {
             juce::Path p;
-            const int lineHeight = 50;
-            bounds = bounds.reduced(10);
+            const float lineHeight = 50.0f;
+            bounds = bounds.reduced(10.0f);
             
             /// Top Left
             p.startNewSubPath(bounds.getX(), lineHeight);
@@ -645,8 +645,8 @@ void DockingWindow::moved()
 void DockingWindow::resized()
 {
     juce::DocumentWindow::resized();
-    _data.setWidth(_tree, getWidth());
-    _data.setHeight(_tree, getHeight());
+    _data.setWidth(_tree, static_cast<float>(getWidth()));
+    _data.setHeight(_tree, static_cast<float>(getHeight()));
 }
 
 
@@ -701,7 +701,7 @@ void DockingWindow::checkWindowSize()
     
     if (display) 
     {
-        auto area = display->userArea.withTrimmedTop(getTitleBarHeight());
+        auto area = display->userArea.withTrimmedTop(getTitleBarHeight()).toFloat();
         if (area.getRight() < position.getX() || position.getX() < area.getX())
             _data.setX(_tree, area.getX());
         

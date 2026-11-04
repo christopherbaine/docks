@@ -1254,10 +1254,10 @@ void DockManagerData::checkBounds(juce::ValueTree& tree)
     auto type = getDockType(tree);
     auto numChildren = tree.getNumChildren();
     
-    auto toRemove = numChildren == 0 ? 0
-                        : type == DockTypes::vertical ? bounds.getHeight() / numChildren
-                        : type == DockTypes::horizontal ? bounds.getWidth() / numChildren
-                        : 0;
+    auto toRemove = numChildren == 0 ? 0.0f
+                        : type == DockTypes::vertical ? bounds.getHeight() / static_cast<float>(numChildren)
+                        : type == DockTypes::horizontal ? bounds.getWidth() / static_cast<float>(numChildren)
+                        : 0.0f;
     
     for (auto child : tree)
     {
