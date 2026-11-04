@@ -850,15 +850,15 @@ void DockingComponent::resizerDidDrag(juce::Point<float> delta, int index)
     
     if (vertical)
     {
-        _data.setHeight(tree, isOrigin ? comp->getHeight() + delta.y : size.y + delta.y);
+        _data.setHeight(tree, isOrigin ? static_cast<float>(comp->getHeight()) + delta.y : size.y + delta.y);
         if (nextTree.isValid() && nextComp != nullptr)
-            _data.setHeight(nextTree, nextSize.isOrigin() ? nextComp->getHeight() - delta.y : nextSize.y - delta.y);
+            _data.setHeight(nextTree, nextSize.isOrigin() ? static_cast<float>(nextComp->getHeight()) - delta.y : nextSize.y - delta.y);
     }
     else
     {
-        _data.setWidth(tree, isOrigin ? comp->getWidth() + delta.x : size.x + delta.x);
+        _data.setWidth(tree, isOrigin ? static_cast<float>(comp->getWidth()) + delta.x : size.x + delta.x);
         if (nextTree.isValid() && nextComp != nullptr)
-            _data.setWidth(nextTree, nextSize.isOrigin() ? nextComp->getWidth() - delta.x : nextSize.x - delta.x);
+            _data.setWidth(nextTree, nextSize.isOrigin() ? static_cast<float>(nextComp->getWidth()) - delta.x : nextSize.x - delta.x);
     }
     
     resized();
